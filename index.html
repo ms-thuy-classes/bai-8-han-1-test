@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HSK 1 - Kiểm Tra Từ Vựng</title>
+    <title>HSK 1 - Kiểm Tra Toàn Diện</title>
     <style>
         :root {
             --bg-gradient: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
-            --card-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
             --primary-pastel: #a1c4fd;
             --secondary-pastel: #c2e9fb;
-            --correct-color: #a8e6cf;
-            --wrong-color: #ffaaa5;
-            --text-color: #555;
+            --correct-color: #2ecc71;
+            --wrong-color: #e74c3c;
+            --text-color: #444;
         }
 
         body {
@@ -23,7 +23,7 @@
             justify-content: center;
             align-items: center;
             margin: 0;
-            color: var(--text-color);
+            padding: 20px;
         }
 
         #quiz-container {
@@ -31,41 +31,38 @@
             padding: 2rem;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            width: 90%;
-            max-width: 600px;
+            width: 100%;
+            max-width: 700px;
             text-align: center;
             backdrop-filter: blur(10px);
         }
 
         .hidden { display: none; }
-
-        h1 { color: #6a89cc; }
+        h1 { color: #576574; margin-bottom: 10px; }
         
         input[type="text"] {
             padding: 12px;
             border-radius: 10px;
             border: 2px solid var(--primary-pastel);
             width: 80%;
-            margin-bottom: 20px;
+            margin: 15px 0;
             outline: none;
+            font-size: 1rem;
         }
 
         button {
             background: var(--primary-pastel);
             border: none;
-            padding: 12px 25px;
+            padding: 12px 30px;
             border-radius: 25px;
             cursor: pointer;
             font-weight: bold;
-            transition: transform 0.2s, background 0.3s;
             color: white;
+            transition: all 0.3s;
             box-shadow: 0 4px 15px rgba(161, 196, 253, 0.4);
         }
 
-        button:hover {
-            transform: translateY(-2px);
-            background: #89b4f7;
-        }
+        button:hover { transform: translateY(-2px); background: #89b4f7; }
 
         .option-btn {
             display: block;
@@ -74,35 +71,31 @@
             background: white;
             color: var(--text-color);
             border: 2px solid var(--secondary-pastel);
-        }
-
-        .option-btn:hover { background: var(--secondary-pastel); }
-
-        .progress {
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            color: #888;
-        }
-
-        .wrong-item {
             text-align: left;
-            background: #fff0f0;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 8px;
-            border-left: 5px solid var(--wrong-color);
+            padding-left: 20px;
         }
 
-        /* Hiệu ứng âm thanh giả lập bằng rung màn hình khi sai */
-        .shake {
-            animation: shake 0.5s;
+        .progress { font-size: 0.9rem; margin-bottom: 1.5rem; color: #888; font-weight: bold; }
+
+        /* Review Section */
+        .review-item {
+            text-align: left;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 12px;
+            border-left: 6px solid;
+            background: white;
         }
+        .review-item.correct { border-color: var(--correct-color); color: var(--correct-color); }
+        .review-item.wrong { border-color: var(--wrong-color); color: var(--wrong-color); }
+        .review-item h4 { margin: 0 0 5px 0; color: #333; }
+        .review-item p { margin: 2px 0; font-size: 0.95rem; }
+
+        .shake { animation: shake 0.5s; }
         @keyframes shake {
-            0% { transform: translateX(0); }
+            0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-10px); }
-            50% { transform: translateX(10px); }
-            75% { transform: translateX(-10px); }
-            100% { transform: translateX(0); }
+            75% { transform: translateX(10px); }
         }
     </style>
 </head>
@@ -111,20 +104,20 @@
 <div id="quiz-container">
     <!-- Màn hình chào -->
     <div id="start-screen">
-        <h1>BÀI KIỂM TRA HSK 1</h1>
-        <p>Chủ đề: Mua sắm & Hoa quả</p>
+        <h1>HỌC TIẾNG TRUNG HSK 1</h1>
+        <p>Kiểm tra từ vựng: Mua sắm & Tiền tệ</p>
         <input type="text" id="user-name" placeholder="Nhập tên của bạn...">
         <br>
-        <button onclick="startQuiz()">Bắt đầu bài thi</button>
+        <button onclick="startQuiz()">Bắt đầu ngay</button>
     </div>
 
     <!-- Màn hình câu hỏi -->
     <div id="question-screen" class="hidden">
         <div class="progress" id="progress">Câu hỏi 1/31</div>
-        <h2 id="question-text">Câu hỏi ở đây</h2>
+        <h2 id="question-text" style="font-size: 1.6rem;"></h2>
         <div id="options-container"></div>
         <div id="input-container" class="hidden">
-            <input type="text" id="text-answer" placeholder="Nhập câu trả lời...">
+            <input type="text" id="text-answer" placeholder="Nhập câu trả lời bằng tiếng Trung...">
             <br>
             <button onclick="checkTextAnswer()">Gửi đáp án</button>
         </div>
@@ -132,67 +125,67 @@
 
     <!-- Màn hình kết quả -->
     <div id="result-screen" class="hidden">
-        <h1>Kết quả bài thi</h1>
-        <h2 id="final-name"></h2>
-        <p id="score-text" style="font-size: 1.5rem; font-weight: bold;"></p>
-        <div id="wrong-answers-list"></div>
+        <h1>Tổng kết bài thi</h1>
+        <h3 id="final-name"></h3>
+        <p id="score-text" style="font-size: 1.8rem; font-weight: bold; margin: 10px 0;"></p>
+        <hr>
+        <div id="summary-list" style="max-height: 400px; overflow-y: auto; padding-right: 10px;"></div>
         <br>
-        <button onclick="location.reload()">Làm lại</button>
+        <button onclick="location.reload()">Làm lại bài test</button>
     </div>
 </div>
 
-<!-- Audio giả lập (Dùng link âm thanh mẫu) -->
 <audio id="audio-correct" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"></audio>
 <audio id="audio-wrong" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
 
 <script>
     const questions = [
-        // 20 câu trắc nghiệm
-        { q: "你想买什么 ______？", a: ["苹果", "水果", "钱", "斤"], correct: 1 },
-        { q: "这个 ______ 很大。", a: ["果", "吧", "给", "找"], correct: 0 },
-        { q: "我要 ______ 苹果。", a: ["卖", "块", "买", "便宜"], correct: 2 },
-        { q: "这里不 ______ 水果。", a: ["卖", "贵", "多", "少"], correct: 0 },
-        { q: "一 ______ 苹果多少钱？", a: ["块", "斤", "元", "分"], correct: 1 },
-        { q: "一 ______ 是两斤。", a: ["公斤", "块", "盾", "毛"], correct: 0 },
-        { q: "______ 钱？", a: ["多少", "什么", "谁", "哪"], correct: 0 },
-        { q: "这里有很 ______ 人。", a: ["多", "少", "贵", "块"], correct: 0 },
-        { q: "太 ______ 了，我不买。", a: ["便宜", "少", "多", "贵"], correct: 3 },
-        { q: "五 ______ 钱。(Khẩu ngữ)", a: ["元", "块", "角", "分"], correct: 1 },
-        { q: "十 ______ 人民币。(Văn viết)", a: ["块", "元", "盾", "斤"], correct: 1 },
-        { q: "八 ______ 钱。(0.8 Tệ - Khẩu ngữ)", a: ["角", "毛", "分", "块"], correct: 1 },
-        { q: "三 ______ 。(0.3 Tệ - Văn viết)", a: ["毛", "角", "元", "盾"], correct: 1 },
-        { q: "两 ______ 钱。(Xu)", a: ["分", "块", "毛", "斤"], correct: 0 },
-        { q: "一万 ______ 。(Tiền VN)", a: ["元", "盾", "块", "角"], correct: 1 },
-        { q: "太贵了， ______ 一点儿吧。", a: ["便宜", "多", "少", "给"], correct: 0 },
-        { q: "太好 ______ ！", a: ["吧", "了", "吗", "呢"], correct: 1 },
-        { q: "我们走 ______ 。", a: ["了", "吧", "吗", "呢"], correct: 1 },
-        { q: "______ 您钱。", a: ["找", "给", "卖", "多少"], correct: 1 },
-        { q: "______ 多少钱？(Tổng cộng)", a: ["一共", "多少", "很大", "苹果"], correct: 0 },
-        
-        // 5 câu sắp xếp (Dạng text)
-        { q: "Sắp xếp: 钱 / 找 / 三块 / 您", correct: "找您三块", type: "text" },
-        { q: "Sắp xếp: 一共 / 多少 / 钱", correct: "一共多少钱", type: "text" },
-        { q: "Sắp xếp: 一斤 / 苹果 / 半 / 我 / 买", correct: "我买一斤半苹果", type: "text" },
-        { q: "Sắp xếp: 水果 / 卖 / 这里 / 不", correct: "这里不卖水果", type: "text" },
-        { q: "Sắp xếp: 便宜 / 吧 / 一点儿 / 再", correct: "再便宜一点儿吧", type: "text" },
+        // TRẮC NGHIỆM (20 CÂU)
+        { q: "你想买什么 ______？", a: ["苹果", "水果", "钱", "斤"], c: 1, m: "Bạn muốn mua hoa quả gì?" },
+        { q: "这个 ______ 很大。", a: ["果", "吧", "给", "找"], c: 0, m: "Quả này rất lớn." },
+        { q: "我要 ______ 苹果。", a: ["卖", "块", "买", "便宜"], c: 2, m: "Tôi muốn mua táo." },
+        { q: "这里不 ______ 水果。", a: ["卖", "贵", "多", "少"], c: 0, m: "Ở đây không bán hoa quả." },
+        { q: "一 ______ 苹果多少钱？", a: ["块", "斤", "元", "分"], c: 1, m: "Một cân táo bao nhiêu tiền?" },
+        { q: "一 ______ 是两斤。", a: ["公斤", "块", "盾", "毛"], c: 0, m: "Một kg là hai cân (Trung Quốc)." },
+        { q: "______ 钱？", a: ["多少", "什么", "谁", "哪"], c: 0, m: "Bao nhiêu tiền?" },
+        { q: "这里有很 ______ 人。", a: ["多", "少", "贵", "块"], c: 0, m: "Ở đây có rất nhiều người." },
+        { q: "太 ______ 了，我不买。", a: ["便宜", "少", "多", "贵"], c: 3, m: "Đắt quá rồi, tôi không mua." },
+        { q: "五 ______ 钱。(Khẩu ngữ)", a: ["元", "块", "角", "分"], c: 1, m: "Năm đồng (tệ)." },
+        { q: "十 ______ 人民币。(Văn viết)", a: ["块", "元", "盾", "斤"], c: 1, m: "Mười nhân dân tệ." },
+        { q: "八 ______ 钱。(0.8 Tệ - Khẩu ngữ)", a: ["角", "毛", "分", "块"], c: 1, m: "Tám hào." },
+        { q: "三 ______ 。(0.3 Tệ - Văn viết)", a: ["毛", "角", "元", "盾"], c: 1, m: "Ba hào." },
+        { q: "两 ______ 钱。(Xu)", a: ["分", "块", "毛", "斤"], c: 0, m: "Hai xu." },
+        { q: "一万 ______ 。(Tiền Việt Nam)", a: ["元", "盾", "块", "角"], c: 1, m: "Mười nghìn đồng (VNĐ)." },
+        { q: "太贵了， ______ 一点儿吧。", a: ["便宜", "多", "少", "给"], c: 0, m: "Rẻ thêm một chút đi." },
+        { q: "太好 ______ ！", a: ["吧", "了", "吗", "呢"], c: 1, m: "Tốt quá rồi!" },
+        { q: "我们走 ______ 。", a: ["了", "吧", "吗", "呢"], c: 1, m: "Chúng ta đi thôi." },
+        { q: "______ 您钱。", a: ["找", "给", "卖", "多少"], c: 1, m: "Gửi tiền cho ngài." },
+        { q: "______ 多少钱？(Tổng cộng)", a: ["一共", "多少", "很大", "苹果"], c: 0, m: "Tổng cộng bao nhiêu tiền?" },
 
-        // 6 câu dịch (Dạng text)
-        { q: "Dịch: Bạn muốn mua hoa quả gì?", correct: "你想买什么水果", type: "text" },
-        { q: "Dịch: Một cân táo bao nhiêu tiền?", correct: "一斤苹果多少钱", type: "text" },
-        { q: "Dịch: Tổng cộng hết bao nhiêu tiền?", correct: "一共多少钱", type: "text" },
-        { q: "Dịch: Đắt quá rồi!", correct: "太贵了", type: "text" },
-        { q: "Dịch: Trả lại ngài 10 đồng.", correct: "找您十块", type: "text" },
-        { q: "Dịch: Một kg là hai cân.", correct: "一公斤是两斤", type: "text" }
+        // SẮP XẾP (5 CÂU)
+        { q: "Sắp xếp: 钱 / 找 / 三块 / 您", c: "找您三块", t: "text", m: "Trả lại ngài ba đồng." },
+        { q: "Sắp xếp: 一共 / 多少 / 钱", c: "一共多少钱", t: "text", m: "Tổng cộng bao nhiêu tiền?" },
+        { q: "Sắp xếp: 一斤 / 苹果 / 半 / 我 / 买", c: "我买一斤半苹果", t: "text", m: "Tôi mua một cân rưỡi táo." },
+        { q: "Sắp xếp: 水果 / 卖 / 这里 / 不", c: "这里不卖水果", t: "text", m: "Ở đây không bán hoa quả." },
+        { q: "Sắp xếp: 便宜 / 吧 / 一点儿 / 再", c: "再便宜一点儿吧", t: "text", m: "Rẻ thêm một chút đi nhé." },
+
+        // DỊCH (6 CÂU)
+        { q: "Dịch: Bạn muốn mua hoa quả gì?", c: "你想买什么水果", t: "text", m: "你想买什么水果？" },
+        { q: "Dịch: Một cân táo bao nhiêu tiền?", c: "一斤苹果多少钱", t: "text", m: "一斤苹果多少钱？" },
+        { q: "Dịch: Tổng cộng hết bao nhiêu tiền?", c: "一共多少钱", t: "text", m: "一共多少钱？" },
+        { q: "Dịch: Đắt quá rồi!", c: "太贵了", t: "text", m: "太贵了！" },
+        { q: "Dịch: Trả lại ngài 10 đồng.", c: "找您十块", t: "text", m: "找您十块。" },
+        { q: "Dịch: Một kg là hai cân.", c: "一公斤是两斤", t: "text", m: "一公斤是两斤。" }
     ];
 
     let currentIdx = 0;
     let score = 0;
     let userName = "";
-    let wrongAnswers = [];
+    let userHistory = []; // Lưu lại lịch sử trả lời
 
     function startQuiz() {
-        userName = document.getElementById('user-name').value;
-        if (!userName) { alert("Vui lòng nhập tên!"); return; }
+        userName = document.getElementById('user-name').value.trim();
+        if (!userName) { alert("Vui lòng cho biết tên của bạn!"); return; }
         document.getElementById('start-screen').classList.add('hidden');
         document.getElementById('question-screen').classList.remove('hidden');
         showQuestion();
@@ -200,17 +193,18 @@
 
     function showQuestion() {
         const q = questions[currentIdx];
-        document.getElementById('progress').innerText = `Câu hỏi ${currentIdx + 1}/${questions.length}`;
+        document.getElementById('progress').innerText = `CÂU HỎI ${currentIdx + 1} / ${questions.length}`;
         document.getElementById('question-text').innerText = q.q;
         
         const optionsBox = document.getElementById('options-container');
         const inputBox = document.getElementById('input-container');
         optionsBox.innerHTML = "";
         
-        if (q.type === "text") {
+        if (q.t === "text") {
             optionsBox.classList.add('hidden');
             inputBox.classList.remove('hidden');
             document.getElementById('text-answer').value = "";
+            document.getElementById('text-answer').focus();
         } else {
             optionsBox.classList.remove('hidden');
             inputBox.classList.add('hidden');
@@ -218,46 +212,43 @@
                 const btn = document.createElement('button');
                 btn.className = "option-btn";
                 btn.innerText = opt;
-                btn.onclick = () => checkAnswer(index);
+                btn.onclick = () => processAnswer(index);
                 optionsBox.appendChild(btn);
             });
         }
     }
 
-    function checkAnswer(idx) {
-        if (idx === questions[currentIdx].correct) {
-            handleSuccess();
+    function processAnswer(userAns) {
+        const q = questions[currentIdx];
+        let isCorrect = false;
+        let displayAns = "";
+
+        if (q.t === "text") {
+            const cleanUser = userAns.trim().replace(/[？。！,]/g, "");
+            const cleanCorrect = q.c.replace(/[？。！,]/g, "");
+            isCorrect = (cleanUser === cleanCorrect);
+            displayAns = q.c;
         } else {
-            handleFailure();
+            isCorrect = (userAns === q.c);
+            displayAns = q.a[q.c];
         }
-    }
 
-    function checkTextAnswer() {
-        const val = document.getElementById('text-answer').value.trim().replace(/[？。！,]/g, "");
-        const target = questions[currentIdx].correct.replace(/[？。！,]/g, "");
-        if (val === target) {
-            handleSuccess();
+        if (isCorrect) {
+            score++;
+            document.getElementById('audio-correct').play();
         } else {
-            handleFailure();
+            document.getElementById('audio-wrong').play();
+            document.getElementById('quiz-container').classList.add('shake');
+            setTimeout(() => document.getElementById('quiz-container').classList.remove('shake'), 500);
         }
-    }
 
-    function handleSuccess() {
-        score++;
-        document.getElementById('audio-correct').play();
-        nextQuestion();
-    }
+        userHistory.push({
+            question: q.q,
+            isCorrect: isCorrect,
+            correctAnswer: displayAns,
+            meaning: q.m
+        });
 
-    function handleFailure() {
-        document.getElementById('audio-wrong').play();
-        document.getElementById('quiz-container').classList.add('shake');
-        setTimeout(() => document.getElementById('quiz-container').classList.remove('shake'), 500);
-        
-        wrongAnswers.push(questions[currentIdx].q);
-        nextQuestion();
-    }
-
-    function nextQuestion() {
         currentIdx++;
         if (currentIdx < questions.length) {
             showQuestion();
@@ -266,21 +257,35 @@
         }
     }
 
+    function checkTextAnswer() {
+        const val = document.getElementById('text-answer').value;
+        if (!val) return;
+        processAnswer(val);
+    }
+
     function showResult() {
         document.getElementById('question-screen').classList.add('hidden');
         document.getElementById('result-screen').classList.remove('hidden');
         document.getElementById('final-name').innerText = "Thí sinh: " + userName;
-        document.getElementById('score-text').innerText = `Điểm: ${Math.round((score/questions.length)*100)} (Đúng ${score}/${questions.length})`;
         
-        const list = document.getElementById('wrong-answers-list');
-        if (wrongAnswers.length > 0) {
-            list.innerHTML = "<h3>Các câu bạn đã làm sai:</h3>";
-            wrongAnswers.forEach(q => {
-                list.innerHTML += `<div class="wrong-item">${q}</div>`;
-            });
-        } else {
-            list.innerHTML = "<h3>Tuyệt vời! Bạn không sai câu nào.</h3>";
-        }
+        const percent = Math.round((score/questions.length)*100);
+        document.getElementById('score-text').innerText = `Điểm: ${percent}/100 (${score}/${questions.length})`;
+
+        const summaryList = document.getElementById('summary-list');
+        summaryList.innerHTML = "";
+
+        userHistory.forEach(item => {
+            const div = document.createElement('div');
+            div.className = `review-item ${item.isCorrect ? 'correct' : 'wrong'}`;
+            
+            div.innerHTML = `
+                <h4>${item.question}</h4>
+                <p><b>Đáp án đúng:</b> ${item.correctAnswer}</p>
+                <p><b>Dịch nghĩa:</b> ${item.meaning}</p>
+                <p><b>Kết quả:</b> ${item.isCorrect ? 'ĐÚNG' : 'SAI'}</p>
+            `;
+            summaryList.appendChild(div);
+        });
     }
 </script>
 
